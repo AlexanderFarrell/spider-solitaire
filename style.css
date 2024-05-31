@@ -1,0 +1,64 @@
+body {
+    background-color: rgb(20, 78, 20);
+    position: relative;
+    padding: 20px;
+}
+
+.card {
+    transition: 0.5s transform;
+    position: absolute;
+    padding: 0px;
+    width: 70px;
+    height: 140px;
+    border: 3px white solid;
+    border-radius: 6px;
+    background-color: white;
+    text-align: center;
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+    user-select: none;
+}
+
+.card_red {
+    color: red;
+}
+
+.card_front {
+    z-index: 40;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+}
+
+.card_placeholder {
+    z-index: 20;
+    position: absolute;
+    width: 70px;
+    height: 140px;
+    border: 3px rgb(28, 106, 28) solid;
+    background-color: rgb(28, 106, 28);
+    border-radius: 6px;
+}
+
+.card_placeholder_invisible {
+    z-index: 20;
+    position: absolute;
+    width: 70px;
+    height: 140px;
+    border: 3px rgba(28, 106, 28, 0) solid;
+    background-color: rgba(28, 106, 28, 0);
+}
+
+.card_back {
+    z-index: 40;
+    background: url('https://cdn.pixabay.com/photo/2023/06/25/11/12/orange-flowers-8087066_960_720.jpg');
+    background-size: auto 100%;
+}
+
+.card > div:nth-child(2) {
+    place-content: center;
+    text-align: center;
+    font-size: 20px;
+}
+
+.card > div:nth-child(3) {
+    transform: scaleY(-1);
+}
