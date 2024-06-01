@@ -1,5 +1,78 @@
 import {Deck, Card, Placeholder} from './deck.js';
 
+const pile_count = 10;
+const pile_size = 100;
+
+class SpiderGame {
+    constructor() {
+        this.piles = []
+    }
+}
+
+class Pile {
+    constructor(x_position) {
+        this.x = x_position;
+        let placeholder = new Placeholder();
+        this.view = placeholder.render(x_position);
+        this.cards = []
+        document.body.appendChild(this.view.element);
+    }
+
+    add_cards(card_views) {
+        this.cards.push(...card_views);
+
+        for (let i = 0; i < card_views.length; i++) {
+            c = card_views[i];
+            if (c.face_down) {
+                c = c.render_face_down(deck_view.x, deck_view.y)
+            } else {
+                c = c.render(deck_view.x, deck_view.y)
+                setTimeout(() => {
+                    c.make_draggable(() => {
+                        // Check which pile we are over!
+                        let current_pile = Math.floor((c.last_mouse_x / 100) - 1)
+                        if (current_pile >= 0 && current_pile < piles.length) {
+                            // Check if the card is valid
+                            let pile = piles[current_pile]
+                            let last_card = pile.cards[pile.cards.length-1].card
+                            console.log(last_card.num_value, c.card.num_value)
+                            if (last_card.num_value - 1 == c.card.num_value) {
+                                pile.cards.push(c.card)
+                                let prev_pile = piles[i]
+                                prev_pile.cards.pop()
+
+
+                                let next_card = prev_pile.cards[prev_pile.length-1];
+                                if (next_card.face_down) {
+                                    // prev_pile.cards[prev_pile.length-1] =
+                                }
+
+                            } else {
+                                c.reset_to_original()
+                            }
+                        } else {
+                            c.reset_to_original()
+                        }
+
+                    })
+                }, 500)
+            }
+        }
+    }
+
+    reset_card_views() {
+
+    }
+
+    is_within(x, y) {
+        return (this.x < x && x > this.x + pile_size);
+    }
+
+    get last_card() {
+        return this.cards[this.cards.length-1];
+    }
+}
+
 let deck = new Deck([{suit: 'spades', symbol: '♠'}]);
 for (let i = 0; i < 8; i++) {
     let d = new Deck([{suit: 'spades', symbol: '♠'}])
@@ -58,41 +131,44 @@ function draw_from_deck(face_down = false) {
         let dest_y = piles[i].view.y + ((piles[i].cards.length + 1) * 50)
 
         let c = deck.draw_card();
-        if (face_down) {
-            c = c.render_face_down(deck_view.x, deck_view.y)
-        } else {
-            c = c.render(deck_view.x, deck_view.y)
-            setTimeout(() => {
-                c.make_draggable(() => {
-                    // Check which pile we are over!
-                    let current_pile = Math.floor((c.last_mouse_x / 100) - 1)
-                    if (current_pile >= 0 && current_pile < piles.length) {
-                        // Check if the card is valid
-                        let pile = piles[current_pile]
-                        let last_card = pile.cards[pile.cards.length-1].card
-                        console.log(last_card.num_value, c.card.num_value)
-                        if (last_card.num_value - 1 == c.card.num_value) {
-                            pile.cards.push(c.card)
-                            let prev_pile = piles[i]
-                            prev_pile.cards.pop()
+
+        for (let i = 0; i < card_views.length; i++) {
+            c = card_views[i];
+            if (c.face_down) {
+                c = c.render_face_down(deck_view.x, deck_view.y)
+            } else {
+                c = c.render(deck_view.x, deck_view.y)
+                setTimeout(() => {
+                    c.make_draggable(() => {
+                        // Check which pile we are over!
+                        let current_pile = Math.floor((c.last_mouse_x / 100) - 1)
+                        if (current_pile >= 0 && current_pile < piles.length) {
+                            // Check if the card is valid
+                            let pile = piles[current_pile]
+                            let last_card = pile.cards[pile.cards.length-1].card
+                            console.log(last_card.num_value, c.card.num_value)
+                            if (last_card.num_value - 1 == c.card.num_value) {
+                                pile.cards.push(c.card)
+                                let prev_pile = piles[i]
+                                prev_pile.cards.pop()
 
 
-                            let next_card = prev_pile.cards[prev_pile.length-1];
-                            if (next_card.face_down) {
-                                // prev_pile.cards[prev_pile.length-1] = 
+                                let next_card = prev_pile.cards[prev_pile.length-1];
+                                if (next_card.face_down) {
+                                    // prev_pile.cards[prev_pile.length-1] =
+                                }
+
+                            } else {
+                                c.reset_to_original()
                             }
-
                         } else {
                             c.reset_to_original()
                         }
-                    } else {
-                        c.reset_to_original()
-                    }
 
-                })
-            }, 500)
+                    })
+                }, 500)
+            }
         }
-        
         
         piles[i].cards.push(c)
         document.body.appendChild(c.element)
